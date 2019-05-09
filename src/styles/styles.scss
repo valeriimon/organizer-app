@@ -1,0 +1,34 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import './partials/variables';
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.customized-material.mat-list.mat-list-base {
+  padding-top: 0;
+}
+
+.customized-material.mat-expansion-panel {
+  .mat-expansion-panel-header-title {
+    align-items: center;
+  }
+}
+
+.customized-material.mat-icon {
+  &.light-mode {
+    color: $black-light-color;
+  }
+  &.light-mode.marked {
+    color: $red-color;
+  }
+}
+
+.customized-material.color-selector {
+  .mat-select-value-text {
+    line-height: 48px;
+  }
+}

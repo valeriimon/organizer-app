@@ -1,0 +1,8 @@
+<mat-form-field>
+  <mat-label>Select Color</mat-label>
+  <mat-select class="customized-material color-selector" [(ngModel)]="value" (blur)="onBlur()" [ngStyle]="{'background-color': selectedColor}">
+    <mat-option *ngFor="let color of colorList | keyvalue" [ngStyle]="{'background-color': color.value}" [value]="color.key">
+      {{ color.key }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

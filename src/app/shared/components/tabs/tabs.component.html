@@ -1,0 +1,10 @@
+<div class="tab-list">
+  <div class="tab" *ngFor="let tab of tabs">
+    <a [routerLink]="tab.redirectTo">
+      {{ tab.title }}
+    </a>
+  </div>
+</div>
+<div class="tab-content">
+  <ng-content></ng-content>
+</div>

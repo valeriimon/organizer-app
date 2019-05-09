@@ -1,0 +1,19 @@
+<div class="management-content">
+  <h3>{{ manageType === 'Add' ? 'Create Category' : 'Edit Category' }}</h3>
+  <form #form="ngForm" novalidate>
+    <mat-form-field>
+      <mat-label>Category name</mat-label>
+      <input type="text" required minlength="5" maxlength="15" name="name"  #name="ngModel" matInput [(ngModel)]="categoryName" />
+      <mat-error *ngIf="name.touched && name.invalid">
+        <p *ngIf="name.hasError('required')">Category name is required</p>
+        <p *ngIf="name.hasError('minlength')">Category name must has at least 5 chars</p>
+      </mat-error>
+    </mat-form-field>
+  </form>
+  <div class="management-actions">
+    <button mat-button [disabled]="form.invalid" (click)="onDismiss('submit')">Save</button>
+    <button mat-button (click)="onDismiss('cancel')">Cancel</button>
+  </div>
+</div>
+
+

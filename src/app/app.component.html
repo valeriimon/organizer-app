@@ -1,0 +1,54 @@
+
+<mat-sidenav-container #sidenav>
+  <mat-sidenav class="side-nav" mode="side" opened="true" autoFocus="false">
+    <div class="side-nav__wrapper">
+      <div class="side-nav__logo">
+        <img src="../assets/logo.png" alt="">
+      </div>
+      <mat-divider></mat-divider>
+      <div class="side-nav__close">
+        <button mat-fab color="primary" (click)="sidenav.close()">
+          <mat-icon>arrow_back_ios</mat-icon>
+        </button>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="side-nav__user">
+        <div class="side-nav__user-avatar">
+          <img src="../assets/user.png" alt="">
+        </div>
+        <span class="side-nav__user-name">John Doe Smith</span>
+      </div>
+      <mat-divider></mat-divider>
+      <mat-list class="side-nav__list customized-material">
+        <mat-list-item routerLink="notes">
+          <mat-icon mat-list-icon>notes</mat-icon>
+          <p mat-line>Notes</p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item routerLink="categories">
+          <mat-icon mat-list-icon>category</mat-icon>
+          <p mat-line> Categories </p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </mat-list>
+    </div>
+    
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <main class="main-content">
+      <mat-toolbar color="primary">
+        <mat-toolbar-row>
+          <button mat-icon-button (click)="sidenav.open()">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <span class="example-spacer"></span>
+          <mat-icon class="example-icon" aria-hidden="false" aria-label="Example heart icon">favorite</mat-icon>
+          <mat-icon class="example-icon" aria-hidden="false" aria-label="Example delete icon">delete</mat-icon>
+        </mat-toolbar-row>
+      </mat-toolbar>
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+

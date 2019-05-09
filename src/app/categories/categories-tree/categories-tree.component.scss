@@ -1,0 +1,16 @@
+.categories-tree {
+  .ct-content {
+    padding: 20px;
+  }
+  .ct-header {
+    display: flex;
+    background: #fff;
+    justify-content: space-between;
+    padding: 15px 15px;
+    &__actions {
+      display: flex;
+      align-items: center;
+    }
+    box-shadow: 0px -2px 5px #333;
+  }
+}

@@ -1,0 +1,11 @@
+
+<div class="categories-tree">
+  <div class="ct-header">
+    <div class="ct-header__actions">
+      <button mat-button matTooltip="Add Root Category" (click)="addCategory()">Add Root Category</button>
+    </div>
+  </div>
+  <div class="ct-content">
+    <app-categories-node *ngFor="let category of categories" [category]="category"></app-categories-node>
+  </div>
+</div>

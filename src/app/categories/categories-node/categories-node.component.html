@@ -1,0 +1,28 @@
+<div class="category-content">
+  <div class="category-data">
+    <span class="category-name">{{ category.name }}</span>
+    <span class="tree-node-connector__vertical" *ngIf="category.children && category.children.length"></span>
+    <span class="tree-node-connector__horizontal" *ngIf="parentCategory"></span>
+    <div class="category-actions" >
+      <a class="category-actions__btn" matTooltip="Add Sub Category" (click)="manageCategory('Add')">
+        <mat-icon>add</mat-icon>
+      </a>
+      <a class="category-actions__btn" matTooltip="Edit Category" (click)="manageCategory('Edit')">
+        <mat-icon>edit</mat-icon>
+      </a>
+      <a class="category-actions__btn" matTooltip="Remove Category" (click)="emitRemoveCategoryEvent()">
+        <mat-icon>delete</mat-icon>
+      </a>
+    </div>
+  </div>
+  
+  <div class="category-children" *ngIf="category.children && category.children.length">
+    <app-categories-node 
+      *ngFor="let node of category.children" 
+      [category]="node" 
+      [parentCategory]="category"
+      (onEvent)="onChildEvent($event)"
+    ></app-categories-node>
+  </div>
+</div>
+
