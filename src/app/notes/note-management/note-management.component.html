@@ -1,8 +1,0 @@
-<form>
-  <mat-form-field>
-    <mat-label>Note name</mat-label>
-    <input type="text" matInput name="note-name" #noteName="ngModel" [(ngModel)]="note.name">
-  </mat-form-field>
-  <h3>Write your note</h3>
-  <ckeditor [(ngModel)]="note.text" [ngModelOptions]="{standalone: true}" [editor]="Editor"></ckeditor>
-</form>

@@ -1,4 +1,12 @@
-<ng-container *ngIf="sidebarService.activeSidebars.has(name)">
-  <ng-content></ng-content>
+<ng-container *ngIf="isOpen">
+  <mat-toolbar class="content-toolbar">
+    <span>{{ sidebarTitle }}</span>
+    <button mat-icon-button (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-card>
+    <ng-content></ng-content>
+  </mat-card>
 </ng-container>
 

@@ -1,50 +1,94 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { Subject, BehaviorSubject } from 'rxjs';
+import { tap, distinctUntilChanged, share, subscribeOn, debounceTime } from 'rxjs/operators';
 import { SidebarComponent } from '../components/sidebar/sidebar.component';
+import { SharedModule } from '../shared.module';
 
-@Injectable()
+
+/**
+ * Warnings: Circular Dependency with components in this module due to using 'providedIn'
+ */
+@Injectable({
+  providedIn: SharedModule
+})
 export class SidebarService {
-  zIndex: string = ''
   activeSidebars: Set<string> = new Set();
-  activeSidebarsWatcher: Subject<string> = new Subject();
+  
+  private activeSidebarsWatcher$: BehaviorSubject<{open?: boolean, sidebarName?: string}> = new BehaviorSubject({});
+
+  private focusedSidebarWatcher$: BehaviorSubject<{zIndex?: number, sidebarName?: string}> = new BehaviorSubject({});
+
   constructor() { 
-    this.activateSidebarsWatcher();
+    this.regActivateSidebarsWatcher();
   }
 
-  activateSidebarsWatcher() {
-    this.activeSidebarsWatcher
+  regActivateSidebarsWatcher() {
+    this.activeSidebarsWatcher$
       .pipe(
-        distinctUntilChanged((oldValue: string, newValue: string) => 
-          (oldValue === newValue && this.activeSidebars.has(newValue))
+        distinctUntilChanged(({open: oldStatus, sidebarName: oldValue}, {open: newStatus, sidebarName: newValue}) => 
+          (oldValue === newValue && oldStatus === newStatus)
         ),
-        tap((sidebar: string) => {
-          if(!this[sidebar].allowMulti) {
-            this.activeSidebars.clear();
+        tap(({open, sidebarName}) => {
+          if(!this[sidebarName]) return
+          if(open) {
+            if(!this[sidebarName].allowMulti) {
+              this.activeSidebars.clear();
+            }
+  
+            this.makeSidebarFocused(sidebarName);
+  
+            this.activeSidebars.add(sidebarName);
+            return
           }
+          
 
-          const lastOpenedSideBar: string = Array.from(this.activeSidebars)[this.activeSidebars.size - 1];
-          if(lastOpenedSideBar) {
-            this[sidebar].zIndex = (+this[lastOpenedSideBar].zIndex + 1).toString();
-          }
+          this.activeSidebars.delete(sidebarName);
         }),
-        debounceTime(500)
-      )
-      .subscribe((sidebar) => {
-        this.activeSidebars.add(sidebar);
-        console.log(this.activeSidebars);
-      })
+      ).subscribe();
+  }
+
+  subToActivateSidebarsWatcher() {
+    return this.activeSidebarsWatcher$.pipe(share());
+  }
+
+  subToFocusedSidebarWatcher() {
+    return this.focusedSidebarWatcher$.pipe(share());
+  }
+
+  makeSidebarFocused(sidebarName: string) {
+    const sidebars = Array.from(this.activeSidebars);
+    let zIndex: number = 0;
+    for(let sidebarName of sidebars) {
+      const sidebar = this[sidebarName] as SidebarComponent;
+      if(sidebar.zIndex > zIndex) {
+        zIndex = sidebar.zIndex;
+      }
+    }
+    this.focusedSidebarWatcher$.next({
+      zIndex: zIndex ? zIndex + 1 : 1000,
+      sidebarName
+    })
   }
 
   registerSidebar(sidebarName: string, SidebarComponent: SidebarComponent) {
     this[sidebarName] = SidebarComponent;
   }
 
-  openSidebar(sidebarName: string) {
-    this.activeSidebarsWatcher.next(sidebarName);
+  openSidebar(sidebarName: string, options?: {position?: string, width?: string}) {
+    if(!this[sidebarName]) return
+    if(options) {
+      (this[sidebarName] as SidebarComponent).changeSidebarOptions(options);
+    }
+    this.activeSidebarsWatcher$.next({
+      open: true,
+      sidebarName
+    });
   }
 
   closeSidebar(sidebarName: string) {
-    this.activeSidebars.delete(sidebarName);
+    this.activeSidebarsWatcher$.next({
+      open: false,
+      sidebarName
+    })
   }
 }

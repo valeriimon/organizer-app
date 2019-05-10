@@ -1,0 +1,24 @@
+<div class="tags-header">
+  <button mat-icon-button (click)="manageTag($event, {}, 'Add')">
+    <mat-icon>add</mat-icon>
+  </button>
+  <mat-form-field>
+    <mat-label>Search tag...</mat-label>
+    <input type="text" matInput #searchInp (input)="onSearch(searchInp.value)">
+    <span class="search-prefix" matPrefix>
+      <mat-icon>search</mat-icon>
+    </span>
+  </mat-form-field>
+</div>
+<div class="tag-list">
+  <mat-chip-list>
+    <mat-chip [matTooltip]="tag.name" class="tag" *ngFor="let tag of _filteredTags" (click)="selected(tag)">
+      <mat-icon class="customized-material light-mode marked">{{tag.icon}}</mat-icon>
+      <span class="tag__name">{{tag.name}}</span>
+      <span class="tag__actions">
+        <mat-icon (click)="manageTag($event, tag, 'Edit')" class="customized-material light-mode">edit</mat-icon>
+        <mat-icon (click)="removeTag($event, tag)" class="customized-material light-mode">delete</mat-icon>
+      </span>
+    </mat-chip>
+  </mat-chip-list>
+</div>

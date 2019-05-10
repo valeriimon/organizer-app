@@ -1,0 +1,10 @@
+<div class="sidebar-list">
+  <span class="sidebar-list__label">Sidebars </span>
+  <ng-container *ngIf="activeSidebars.length"></ng-container>
+  <div class="sidebar-list__item" *ngFor="let sidebar of activeSidebars" (click)="onItemClicked(sidebar)">
+    <span class="sidebar-list__item-title">{{sidebar.title}}</span>
+    <a class="sidebar-list__item-close" (click)="closeSidebar(sidebar)">
+      <mat-icon>close</mat-icon>
+    </a>
+  </div>
+</div>

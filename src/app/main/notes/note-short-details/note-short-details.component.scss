@@ -1,0 +1,11 @@
+@import '../../../../styles/partials/variables';
+
+.note-short-details {
+  padding: 10px;
+  border: 1px solid $border-color;
+  .nsd {
+    &__name {
+      margin: 0 0 10px;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+<div class="selected-categories" *ngIf="selectedCategories.length">
+  <h4>Selected</h4>
+  <mat-chip-list>
+    <mat-chip *ngFor="let category of selectedCategories" (removed)="removeCategory(category.name)">
+      {{category.name}}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
+  <div class="selected-categories__actions">
+    <button mat-button (click)="confirm()">Confirm</button>
+  </div>
+</div>
+

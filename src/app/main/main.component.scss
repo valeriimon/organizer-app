@@ -1,0 +1,17 @@
+@import '../../styles/partials/variables';
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 100%;
+  overflow-x: hidden;
+  .right-nav {
+    margin-left: auto;
+  }
+  .nav-route {
+    mat-icon {
+      margin-right: 5px;
+    }
+  }
+}

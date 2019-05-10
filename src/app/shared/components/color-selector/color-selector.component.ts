@@ -13,12 +13,11 @@ const noop = () => { }
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => ColorSelectorComponent),
     multi: true
-  }]
+  }],
 })
 export class ColorSelectorComponent implements ControlValueAccessor {
   label: string = '';
   colorList: ColorPallete = colors;
-  selectedColor: string = ''
 
   private innerValue: any = '';
 
@@ -34,8 +33,6 @@ export class ColorSelectorComponent implements ControlValueAccessor {
   set value(v: any) {
     if (v !== this.innerValue) {
       this.innerValue = v;
-      this.selectedColor = this.colorList[v];
-      console.log(this.selectedColor);
       this._onChange(v);
     }
   }

@@ -1,0 +1,18 @@
+<div class="management-content">
+  <h3>{{ manageType === 'Add' ? 'Create Tag' : 'Edit Tag' }}</h3>
+  <form #form="ngForm" novalidate>
+    <mat-form-field>
+      <mat-label>Tag name</mat-label>
+      <input type="text" name="name"  #name="ngModel" matInput [(ngModel)]="tagName" />
+    </mat-form-field>
+    <mat-divider></mat-divider>
+    <mat-form-field>
+      <mat-label>Tag icon</mat-label>
+      <input type="text" name="icon"  #icon="ngModel" matInput [(ngModel)]="tagIcon" />
+    </mat-form-field>
+  </form>
+  <div class="management-actions">
+    <button mat-button [disabled]="form.invalid" (click)="onDismiss('submit')">Save</button>
+    <button mat-button (click)="onDismiss('cancel')">Cancel</button>
+  </div>
+</div>

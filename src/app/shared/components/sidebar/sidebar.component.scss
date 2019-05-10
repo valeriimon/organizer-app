@@ -4,8 +4,17 @@
   bottom: 0;
   display: flex;
   flex-direction: column;
-  & ::ng-deep > * {
+  & ::ng-deep > *:not(.mat-toolbar) {
     flex-grow: 1;
   }
+}
+
+mat-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.content-toolbar {
+  justify-content: space-between;
 }
 

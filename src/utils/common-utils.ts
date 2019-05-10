@@ -10,3 +10,7 @@ export const hexToRgbA = (hex: string, opacity: string) => {
   }
   throw new Error('Bad Hex');
 }
+
+export const generatetKey = (prefix: string) => {
+  return  prefix + Date.now() + Math.random()
+}

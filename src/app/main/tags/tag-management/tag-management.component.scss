@@ -1,0 +1,10 @@
+.management-content {
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  .management-actions {
+    margin-top: auto;
+    padding-top: 10px;
+    
+  }
+}
