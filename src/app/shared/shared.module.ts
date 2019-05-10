@@ -1,7 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../material/material.module';
-import { TabsComponent } from './components/tabs/tabs.component';
 import { RouterModule } from '@angular/router';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ColorSelectorComponent } from './components/color-selector/color-selector.component';
@@ -10,7 +9,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { SidebarListComponent } from './components/sidebar-list/sidebar-list.component';
 
 @NgModule({
-  declarations: [TabsComponent, SidebarComponent, ColorSelectorComponent, SidebarListComponent],
+  declarations: [SidebarComponent, ColorSelectorComponent, SidebarListComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -22,7 +21,6 @@ import { SidebarListComponent } from './components/sidebar-list/sidebar-list.com
     MaterialModule,
     FormsModule,
     CKEditorModule,
-    TabsComponent,
     SidebarComponent,
     SidebarListComponent,
     ColorSelectorComponent

@@ -7,7 +7,6 @@ import { CategoriesNodeComponent } from './categories-node/categories-node.compo
 import { SharedModule } from '../../shared/shared.module';
 import { CategoryManagementComponent } from './category-management/category-management.component';
 import { CategoriesService } from './services/categories.service';
-import { SelectedCategoriesComponent } from './selected-categories/selected-categories.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +14,6 @@ import { SelectedCategoriesComponent } from './selected-categories/selected-cate
     CategoriesTreeComponent,
     CategoriesNodeComponent,
     CategoryManagementComponent,
-    SelectedCategoriesComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +27,6 @@ import { SelectedCategoriesComponent } from './selected-categories/selected-cate
   exports: [
     CategoriesTreeComponent,
     CategoriesNodeComponent,
-    SelectedCategoriesComponent
   ]
 })
 export class CategoriesModule { }
