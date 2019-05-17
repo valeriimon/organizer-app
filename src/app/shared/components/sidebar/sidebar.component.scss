@@ -9,15 +9,18 @@
   }
 }
 
-mat-card {
+.content-wrapper {
   display: flex;
   flex-direction: column;
-  /* TODO: resolve overflow with x axis */
-  overflow-x: hidden;
-  overflow-y: auto;
+  border-left: 1px solid #cecece;
+  border-right: 1px solid #cecece;
+  background-color: #fff;
+  padding: 0 10px;
+  overflow: auto;
 }
 
 .content-toolbar {
   justify-content: space-between;
+  min-height: 60px;
 }
 

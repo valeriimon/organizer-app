@@ -1,0 +1,18 @@
+<div class="note-details">
+  <div class="nd__categories">
+    <span>Categories: </span>
+    <div class="nd__categories-item" *ngFor="let cat of note.categories; let i = index">
+        {{ cat.name + (i < note.categories.length ? "," : "") }}
+    </div>
+  </div>
+  <div class="nd__tags">
+    <span>Tags: </span>
+    <div class="nd__tags-item" *ngFor="let tag of note.tags; let i = index">
+      {{ tag.name + (i < note.tags.length ? "," : "") }}
+    </div>
+  </div>
+  <div class="nd__text">
+    <span>Note text: </span>
+    <div class="nd__text-item" [innerHTML]="note.text"></div>
+  </div>
+</div>

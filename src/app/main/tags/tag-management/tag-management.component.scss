@@ -2,6 +2,10 @@
   min-height: 200px;
   display: flex;
   flex-direction: column;
+  .icons-source {
+    display: inline-block;
+    margin-left: 10px;
+  }
   .management-actions {
     margin-top: auto;
     padding-top: 10px;

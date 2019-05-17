@@ -8,42 +8,34 @@
         <mat-icon>add</mat-icon>
       </button>
     </div>
-    <mat-paginator [length]="100"
-      [pageSize]="10"
-      [pageSizeOptions]="[5, 10, 25, 100]">
-    </mat-paginator>
+    <div class="nl-header__filtered">
+      <span>Filter By Tags </span>
+      <mat-chip-list>
+        <mat-chip class="tag" *ngFor="let tag of filteredByTags" (removed)="filterNote(tag, 'Remove')">
+          <mat-icon class="customized-material light-mode marked">{{tag.icon}}</mat-icon>
+          <span class="tag__name">{{tag.name}}</span>
+          <mat-icon class="tag__actions" matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
   </div>
   <div class="nl-content">
     <mat-accordion>
-      <mat-expansion-panel class="customized-material nl-item" *ngFor="let note of noteList; let idx = index" hideToggle>
+      <mat-expansion-panel class="customized-material nl-item" *ngFor="let note of noteList$ | async; let idx = index" hideToggle>
         <mat-expansion-panel-header [ngStyle]="{'background-color': note.colorRGBA}">
           <mat-panel-title>
-            <div class="nl-item__marks">
-              <button mat-icon-button 
-                [matTooltip]="note.favorite ? 'Unmark' : 'Mark as favorite'"
-                (click)="toogleMark($event, 'favorite', idx)"
-              >
-                <mat-icon class="customized-material light-mode" [ngClass]="{'marked': note.favorite}">favorites</mat-icon>
-              </button>
-              <button mat-icon-button 
-                [matTooltip]="note.important ? 'Unmark' : 'Mark as important'"
-                (click)="toogleMark($event, 'important', idx)"
-              >
-                <mat-icon class="customized-material light-mode" [ngClass]="{'marked': note.important}">label_important</mat-icon>
-              </button>
-            </div>
             <span class="nl-item__name">{{ note.name }}</span>
           </mat-panel-title>
           <mat-panel-description>
             <span class="nl-item__text">{{ note.shortDescription }}</span>
             <div class="nl-item__header-actions">
-              <button mat-icon-button matTooltip="Remove" (click)="removeNote(note.key)">
+              <button mat-icon-button matTooltip="Remove" (click)="removeNote($event, note.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
           </mat-panel-description>
         </mat-expansion-panel-header>
-        <app-note-short-details [note]="note"></app-note-short-details>
+        <app-note-details [note]="note"></app-note-details>
         <mat-action-row>
           <button mat-button color="primary" (click)="editNote(note); noteManagement.open()">Edit Note</button>
         </mat-action-row>
@@ -69,12 +61,10 @@
 
 <!-- CDK overlay components -->
 <mat-menu #notesFilterBy="matMenu" >
-  <button mat-menu-item>
-    <mat-icon>favorites</mat-icon>
-    <span>Favorites</span>
-  </button>
-  <button mat-menu-item>
-    <mat-icon>label_important</mat-icon>
-    <span>Important</span>
-  </button>
+  <ng-container *ngFor="let tag of tagList$ | async">
+    <button mat-menu-item (click)="filterNote(tag, 'Add')">
+      <mat-icon>{{tag.icon}}</mat-icon>
+      <span>{{tag.name}}</span>
+    </button>
+  </ng-container>
 </mat-menu>

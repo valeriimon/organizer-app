@@ -10,6 +10,9 @@
       <mat-label>Tag icon</mat-label>
       <input type="text" name="icon"  #icon="ngModel" matInput [(ngModel)]="tagIcon" />
     </mat-form-field>
+    <a class="icons-source" href="https://material.io/tools/icons" target="_blank">
+      <strong>*Please, use only material icons</strong>
+    </a>
   </form>
   <div class="management-actions">
     <button mat-button [disabled]="form.invalid" (click)="onDismiss('submit')">Save</button>

@@ -1,0 +1,32 @@
+@import '../../../../styles/partials/variables';
+
+.note-details {
+  padding: 10px;
+  
+  .nd {
+    &__categories,
+    &__tags {
+      display: flex;
+      padding-left: 15px;
+      & > span {
+        color: #a7a7a7;
+        margin-right: 10px;
+      }
+      &-item {
+        padding-left: 3px;
+      }
+    }
+    &__text {
+      padding-left: 15px;
+      & > span {
+        color: #a7a7a7;
+        display: inline-block;
+        margin: 8px 0 5px
+      }
+      &-item {
+        padding: 10px;
+        box-shadow: 0px 0px 3px #cecece;
+      }
+    }
+  }
+}

@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Subject, BehaviorSubject } from 'rxjs';
-import { tap, distinctUntilChanged, share, subscribeOn, debounceTime } from 'rxjs/operators';
+import { Subject, BehaviorSubject, ConnectableObservable, Observable } from 'rxjs';
+import { tap, distinctUntilChanged, share, subscribeOn, debounceTime, publish } from 'rxjs/operators';
 import { SidebarComponent } from '../components/sidebar/sidebar.component';
-import { SharedModule } from '../shared.module';
 
 
 /**
  * Warnings: Circular Dependency with components in this module due to using 'providedIn'
  */
 @Injectable({
-  providedIn: SharedModule
+  providedIn: 'root'
 })
 export class SidebarService {
   activeSidebars: Set<string> = new Set();
@@ -17,38 +16,30 @@ export class SidebarService {
   private activeSidebarsWatcher$: BehaviorSubject<{open?: boolean, sidebarName?: string}> = new BehaviorSubject({});
 
   private focusedSidebarWatcher$: BehaviorSubject<{zIndex?: number, sidebarName?: string}> = new BehaviorSubject({});
-
-  constructor() { 
-    this.regActivateSidebarsWatcher();
-  }
-
-  regActivateSidebarsWatcher() {
-    this.activeSidebarsWatcher$
-      .pipe(
-        distinctUntilChanged(({open: oldStatus, sidebarName: oldValue}, {open: newStatus, sidebarName: newValue}) => 
+  
+  subToActivateSidebarsWatcher() {
+    return this.activeSidebarsWatcher$.pipe(
+      distinctUntilChanged(({open: oldStatus, sidebarName: oldValue}, {open: newStatus, sidebarName: newValue}) => 
           (oldValue === newValue && oldStatus === newStatus)
         ),
-        tap(({open, sidebarName}) => {
-          if(!this[sidebarName]) return
-          if(open) {
-            if(!this[sidebarName].allowMulti) {
-              this.activeSidebars.clear();
-            }
-  
-            this.makeSidebarFocused(sidebarName);
-  
-            this.activeSidebars.add(sidebarName);
-            return
+      tap(({open, sidebarName}) => {
+        if(!this[sidebarName]) return
+        if(open) {
+          if(!this[sidebarName].allowMulti) {
+            this.activeSidebars.clear();
           }
-          
 
-          this.activeSidebars.delete(sidebarName);
-        }),
-      ).subscribe();
-  }
+          this.makeSidebarFocused(sidebarName);
 
-  subToActivateSidebarsWatcher() {
-    return this.activeSidebarsWatcher$.pipe(share());
+          this.activeSidebars.add(sidebarName);
+          return
+        }
+        
+
+        this.activeSidebars.delete(sidebarName);
+      }),
+      share()
+    );
   }
 
   subToFocusedSidebarWatcher() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Note, Category, Tag } from 'src/app/shared/models';
 import { SidebarService } from 'src/app/shared/services/sidebar.service';
@@ -12,7 +12,7 @@ import { TagsService } from '../../tags/services/tags.service';
   templateUrl: './note-management.component.html',
   styleUrls: ['./note-management.component.scss']
 })
-export class NoteManagementComponent implements OnInit {
+export class NoteManagementComponent implements OnInit, OnDestroy {
   @Input() 
   set note(v: Note) {
     this._note = {...v};
@@ -25,7 +25,7 @@ export class NoteManagementComponent implements OnInit {
   @Output() 
   onSubmit: EventEmitter<Note> = new EventEmitter();
 
-  unsubSubject: Subject<void> = new Subject();
+  unsubSubject$: Subject<void> = new Subject();
   _note: Note = {
     name: '',
     text: '',
@@ -41,15 +41,19 @@ export class NoteManagementComponent implements OnInit {
     private tagsService: TagsService
   ) { }
 
+  ngOnDestroy() {
+    this.unsubSubject$.next();
+  }
+
   ngOnInit() {
     this.categoriesService.subToSelectedCategories()
-      .pipe(takeUntil(this.unsubSubject))
+      .pipe(takeUntil(this.unsubSubject$))
       .subscribe((categories: Category[]) => {
         this.note.categories = categories
       })
 
     this.tagsService.subToSelectedTags()
-      .pipe(takeUntil(this.unsubSubject))
+      .pipe(takeUntil(this.unsubSubject$))
       .subscribe((tags: Tag[]) => {
         this.note.tags = tags;
       })
@@ -77,6 +81,8 @@ export class NoteManagementComponent implements OnInit {
 
   submit() {
     this.onSubmit.emit(this.note);
+    this.tagsService.clearSelectedTags();
+    this.categoriesService.clearSelectedCats()
   }
 
 }

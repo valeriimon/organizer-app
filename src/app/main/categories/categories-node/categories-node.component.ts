@@ -3,6 +3,7 @@ import { Category } from 'src/app/shared/models';
 import { MatBottomSheet } from '@angular/material';
 import { CategoryManagementComponent } from '../category-management/category-management.component';
 import { CategoriesService } from '../services/categories.service';
+import { tap, subscribeOn } from 'rxjs/operators';
 
 @Component({
   selector: 'app-categories-node',
@@ -46,11 +47,21 @@ export class CategoriesNodeComponent implements OnInit {
         if(!category) return
         
         if(manageType === 'Add') {
-          this.category.children = (this.category.children || []).concat([category]);
+          category.parent = this.category.id;
+          this.categoriesService.createCategory(category)
+            .pipe(
+              tap(() => this.categoriesService.fetchCategories().subscribe())
+            )
+            .subscribe()
+
           return
         }
 
-        this.category.name = category.name
+        this.categoriesService.updateCategory({...this.category, ...category})
+          .pipe(
+            tap(() => this.categoriesService.fetchCategories().subscribe())
+          )
+          .subscribe()
       })
   }
 
@@ -63,9 +74,11 @@ export class CategoriesNodeComponent implements OnInit {
 
   onChildEvent(data: {event: string, category: Category}) {
     if(data.event === 'remove') {
-      /* magic is done here */
-      this.category.children = this.category.children
-        .filter(category => category.name !== data.category.name)
+      this.categoriesService.removeCategory(data.category.id)
+        .pipe(
+          tap(() => this.categoriesService.fetchCategories().subscribe())
+        )
+        .subscribe()
     }
   }
 

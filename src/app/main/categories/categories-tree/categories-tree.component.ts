@@ -3,7 +3,8 @@ import { Category } from 'src/app/shared/models';
 import { MatBottomSheet } from '@angular/material';
 import { CategoryManagementComponent } from '../category-management/category-management.component';
 import { CategoriesService } from '../services/categories.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { tap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-categories-tree',
@@ -11,37 +12,30 @@ import { Observable } from 'rxjs';
   styleUrls: ['./categories-tree.component.scss']
 })
 export class CategoriesTreeComponent implements OnInit {
-  categories: Category[] = [{
-    name: 'Category 1',
-    children: [{
-      name: 'Category 1.1',
-    }, {
-      name: 'Category 1.2',
-      children: [{
-        name: 'Category 1.2.1'
-      }, {
-        name: 'Category 1.2.2'
-      }]
-    }, {
-      name: 'Category 1.3'
-    }]
-  }, {
-    name: 'Category 2',
-  }, {
-    name: 'Category 3',
-    children: [{
-      name: 'Category 3.1',
-    }, {
-      name: 'Category 3.2'
-    }]
-  }];
-  
+  categories: Category[] = []
+  unsubSubject$: Subject<void> = new Subject();
   constructor(
     private bottomSheet: MatBottomSheet,
-    
+    private categoriesService: CategoriesService  
   ) { }
 
+  ngOnDestroy() {
+    this.unsubSubject$.next();
+  }
+
   ngOnInit() {
+    this.categoriesService.onCategories()
+      .pipe(
+        takeUntil(this.unsubSubject$)
+      )
+      .subscribe(res => {
+        this.categories = res;
+      })
+    this.getCategories();
+  }
+
+  getCategories() {
+    this.categoriesService.fetchCategories().subscribe()
   }
 
   addCategory() {
@@ -55,7 +49,12 @@ export class CategoriesTreeComponent implements OnInit {
     sheetRef.afterDismissed()
       .subscribe((category: Category) => {
         if(!category) return
-        this.categories = [...this.categories, category];
+        this.categoriesService.createCategory(category)
+          .pipe(
+            takeUntil(this.unsubSubject$),
+            tap(() => this.getCategories())
+          )
+          .subscribe()
       })
   }
 

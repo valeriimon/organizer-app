@@ -25,6 +25,7 @@ import { takeUntil, skipWhile, tap, debounceTime } from 'rxjs/operators';
 })
 export class SidebarComponent implements OnInit {
   isOpen: boolean = false;
+  contentHidden: boolean = false;
   needBlur: boolean = false;
   unsubSubject: Subject<boolean> = new Subject();
   @Input() sidebarTitle: string = ''
@@ -76,6 +77,11 @@ export class SidebarComponent implements OnInit {
     }
   }
 
+  @HostListener('@sideBarOnToggle.done', ['$event'])
+  control(ev) {
+    this.contentHidden = this.isOpen;
+  }
+
   @HostListener('click', ['$event'])
   selfClicked() {
     this.sidebarService.makeSidebarFocused(this.name);
@@ -94,7 +100,6 @@ export class SidebarComponent implements OnInit {
     this.sidebarService.registerSidebar(this.name, this);
     this.subToActiveSidebars();
     this.subToFocusedSidebar();
-    console.log(this.name, this.sidebarTitle);
   }
 
   setPositionOperator(v) {

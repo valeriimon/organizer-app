@@ -1,6 +1,8 @@
 export class Category {
   constructor(
     public name: string,
-    public children?: Category[]
+    public id?: string,
+    public parent?: string,
+    public children?: Category[],
   ) { }
 }

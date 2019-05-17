@@ -13,7 +13,7 @@ export class TagManagementComponent implements OnInit {
   manageType: 'Add' | 'Edit';
   constructor(
     private bottomSheetRef: MatBottomSheetRef<TagManagementComponent>,
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: {name: string, manageType: 'Add' | 'Edit', icon?: string, key?: string}
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: {name: string, manageType: 'Add' | 'Edit', icon?: string}
   ) { }
 
   ngOnInit() {
@@ -34,7 +34,6 @@ export class TagManagementComponent implements OnInit {
       data = {
         name: this.tagName,
         icon: this.tagIcon,
-        key: this.data.key
       }
     }
 

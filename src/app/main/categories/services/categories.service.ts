@@ -1,16 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { share } from 'rxjs/operators';
+import { Subject, Observable, of, BehaviorSubject } from 'rxjs';
+import { share, map, mapTo, tap } from 'rxjs/operators';
 import { Category } from 'src/app/shared/models';
+import { HttpClient } from '@angular/common/http';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class CategoriesService {
+  var1: string
+  categories$: BehaviorSubject<Category[]> = new BehaviorSubject([]);
   private _selectedCategories: Category[] = [];
   selectedCategories$: Subject<Category[]> = new Subject();
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
   subToSelectedCategories() {
     return this.selectedCategories$.pipe(share());
+  }
+
+  onCategories() {
+    return this.categories$.pipe(share())
   }
 
   registerSelectedCategories(categories: Category[]) {
@@ -21,10 +32,52 @@ export class CategoriesService {
     this.selectedCategories$.next(this._selectedCategories);
   }
 
+  clearSelectedCats() {
+    this._selectedCategories = [];
+    this.selectedCategories$.next([]);
+  }
+
   removeSelectedCategory(category: Category) {
     this._selectedCategories = this._selectedCategories
       .filter(cat => cat.name !== category.name);
       
     this.selectedCategories$.next(this._selectedCategories);
+  }
+
+  fetchCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>('api/categories')
+      .pipe(
+        map(this.mapCategories.bind(this)),
+        tap((cats: Category[]) => {
+          this.categories$.next(cats)
+        })
+      );
+  }
+
+  createCategory(category: Category): Observable<Category> {
+    return this.http.post<Category>('api/categories', category)
+  }
+
+  updateCategory(category: Partial<Category>) {
+    return this.http.put('api/categories', category)
+  }
+
+  removeCategory(categoryId: string) {
+    return this.http.delete(`api/categories/${categoryId}`)
+  }
+
+  mapCategories(cats: Category[]): Category[] {
+    return cats.map(cat => {
+      cat.children = this.groupBy(cat.id, cats);
+      if(cat.children.length) {
+        this.mapCategories(cat.children)
+      }
+      
+      return cat.parent ? undefined : cat;
+    }).filter(Boolean)
+  }
+
+  groupBy(catId, cats: Category[]) {
+    return cats.filter(c => c.parent === catId)
   }
 }

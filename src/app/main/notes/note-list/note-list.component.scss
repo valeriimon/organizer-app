@@ -7,12 +7,28 @@
 #note-list {
   .nl-header {
     display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 2;
     background: #fff;
-    justify-content: space-between;
     padding: 0 15px;
+    min-height: 50px;
+    box-shadow: 0px 2px 5px #cecece;
     &__actions {
       display: flex;
       align-items: center;
+      padding-right: 10px;
+      margin-right: 20px;
+      border-right: 1px solid #dcdcdc;
+    }
+    &__filtered {
+      display: flex;
+      align-items: center;
+      & > span {
+        font-size: 20px;
+        color: #a9a9a9;
+        margin-right: 10px;
+      }
     }
   }
   .nl-content {
@@ -32,5 +48,5 @@
   }
 }
 .categories-wrapper {
-  margin: -16px;
+  margin: 0 -10px;
 }
